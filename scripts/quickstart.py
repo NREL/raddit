@@ -31,7 +31,7 @@ import matplotlib.pyplot as plt
 # ------------------------------------------------------------------
 # Config
 # ------------------------------------------------------------------
-SAMPLE_PARQUET = Path("../data/historic_job_trace_sample.parquet")
+JOB_TRACE = Path("../data/historic_job_trace.parquet")
 OUTPUT_DIR     = Path("../data/quickstart_output")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 RANDOM_STATE   = 123
@@ -43,12 +43,11 @@ def ensure_output_dir() -> None:
 #  Load / verify sample data
 # ------------------------------------------------------------------
 def load_sample_df() -> pd.DataFrame:
-    if SAMPLE_PARQUET.exists():
-        df = pd.read_parquet(SAMPLE_PARQUET)
+    if JOB_TRACE.exists():
+        df = pd.read_parquet(JOB_TRACE).sample(10000)
     else:
         raise FileNotFoundError(
-            f"Sample parquet not found at {SAMPLE_PARQUET}. "
-            "Please run sampling script or place file accordingly."
+            f"Job trace not found at {JOB_TRACE}. "
         )
     # Minimal sanity check
     expected = {"avg_power_per_node", "wallclock_used_sec", "script"}

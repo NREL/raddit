@@ -1,1 +1,3 @@
 *.DS_Store
+data/quickstart_output/
+*.ipynb_checkpoints*
