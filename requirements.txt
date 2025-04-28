@@ -1,0 +1,16 @@
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+jupyterlab
+tqdm
+xgboost
+optuna
+torch
+transformers
+optimum-quanto
+polars
+pymilvus
+scipy
+
