@@ -209,6 +209,7 @@ def run_hourly_iteration_incremental(df, client, start_date_str, end_date_str, b
                 })
         
         # Save predictions for this split time to a CSV file.
+        os.makedirs("../data/semantic_search", exist_ok=True)
         csv_filename = f"../data/semantic_search/results_{split_time.strftime('%Y-%m-%dT%H-%M-%S')}.csv"
         os.makedirs(os.path.dirname(csv_filename), exist_ok=True)
         df_results = pd.DataFrame(predictions)

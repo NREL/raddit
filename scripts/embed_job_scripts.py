@@ -11,6 +11,7 @@ from tqdm import tqdm
 import json
 
 import sys
+import os
 
 def process_batch(batch_number):
     with open(f"../data/job_strings/job_strings_{batch_number}.json", "r") as f:
@@ -57,7 +58,8 @@ def process_batch(batch_number):
         del embeddings
 
         torch.cuda.empty_cache()
-
+        
+    os.makedirs("../data/embeddings", exist_ok=True)
     np.save(f'../data/embeddings/embeddings_{batch_number}.npy', np.array(all_embeddings))
         
 

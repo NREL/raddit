@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+import os
 
 def prep_string_for_llm(row):
     s = ''
@@ -16,6 +17,8 @@ def prep_string_for_llm(row):
 df = pd.read_parquet('../data/historic_job_trace.parquet')
 
 df['string_for_embedding'] = df.apply(prep_string_for_llm, axis=1)
+
+os.makedirs("../data/job_strings", exist_ok=True)
 
 for batch_number in tqdm(range(df.shape[0] // 4096 + 1)):
     start_index = batch_number * 4096

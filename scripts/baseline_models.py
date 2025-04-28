@@ -110,8 +110,8 @@ def process_split_time(split_ts: pd.Timestamp, train_days: int, test_hours: int)
 
     # Save results
     stamp = split_ts.strftime("%Y-%m-%d_%H-%M")
-    os.makedirs("../baseline/power", exist_ok=True)
-    os.makedirs("../baseline/runtime", exist_ok=True)
+    os.makedirs("../data/baseline/power", exist_ok=True)
+    os.makedirs("../data/baseline/runtime", exist_ok=True)
 
     power_file = f"../data/baseline/power/{stamp}.csv"
     runtime_file = f"../data/baseline/runtime/{stamp}.csv"
