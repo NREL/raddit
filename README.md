@@ -22,13 +22,13 @@ results—except the *FastSim* simulator, which is still in license review
 ## Repository Layout (top-level)
 
 | Path / file                        | What it holds                                                                  |
-|-----------------------------------|--------------------------------------------------------------------------------|
+|------------------------------------|--------------------------------------------------------------------------------|
 | `data/`                            | All static datasets (job trace, simulation outputs, encrypted embeddings, …).  |
 | `scripts/`                         | Executable code (model training, semantic search, energy-aware priority, …).   |
-| `scripts/quickstart.py`    | **Quick-Start #1** – tiny CPU-only pipeline on a sampled trace of 10k jobs.           |
-| `scripts/quickstart_embedding.py` | **Quick-Start #2** – end-to-end embedding ➜ vector DB ➜ semantic search demo. |
-| `notebooks/`                       | Jupyter notebooks that generate all paper figures.                              |
-| `requirements.txt`                 | Python dependencies (no pinned versions—latest stable is fine).                 |
+| `scripts/quickstart.py`            | **Quick-Start #1** – tiny CPU-only pipeline on a sampled trace of 10k jobs.    |
+| `scripts/quickstart_embedding.py`  | **Quick-Start #2** – end-to-end embedding ➜ vector DB ➜ semantic search demo.  |
+| `notebooks/`                       | Jupyter notebooks that generate all paper figures.                             |
+| `requirements.txt`                 | Python dependencies (no pinned versions—latest stable is fine).                |
 
 ---
 
@@ -43,3 +43,11 @@ python -m venv raddit_env
 source raddit_env/bin/activate          # Windows: raddit_env\Scripts\activate.bat
 pip install --upgrade pip
 pip install -r requirements.txt
+```
+
+## License
+
+This repository is released under the BSD 3-Clause License (see the `LICENSE` file for full text).  
+It is covered by **NREL Software Record Number SWR-23-34**.
+
+This work builds on prior related work available at [https://github.com/NREL/eagle-jobs/](https://github.com/NREL/eagle-jobs/), which is also covered under the same Software Record.
