@@ -1,53 +1,68 @@
-# Energy-Aware HPC Job Scheduling — **Artifact Repository**
+# Resource-Aware Datacenter Digital Twin (RADDiT)  
 
-This repository accompanies the SC’25 paper  
-**“Energy-Aware HPC Job Scheduling: Bridging the Gap from Theory to Practice.”**
-
-It contains **all computational artifacts** needed to reproduce the paper’s
-results—except the *FastSim* simulator, which is still in license review
-(the corresponding input/output datasets are provided).
+RADDiT is a modular, real-time digital-twin platform designed to optimize datacenter energy use by linking job-level predictions, validated scheduling simulation, and grid-aware control.
 
 ---
 
-## Paper Contributions
+RADDiT aims to evolve datacenters from passive, high-variance loads into **active, intelligent participants** in grid operations.
 
-| ID  | Contribution                                                                                                         |
-|-----|-----------------------------------------------------------------------------------------------------------------------|
-| **C1** | Per-job power & runtime prediction with LLM embeddings of enriched job scripts.                                    |
-| **C2** | *FastSim* extension: high-fidelity, high-throughput Slurm simulator (not yet open-source).                         |
-| **C3** | Lightweight energy-aware scheduling strategy implemented via Slurm site-factor priority.                           |
+- **Grid support and resilience:** Aligns job scheduling and control with external energy signals (e.g., behind-the-meter PV, grid prices/demand, utility programs such as FlexConnect).  
+- **Operational cost savings:** Reduces peak power draw and demand charges.  
+- **Sector-wide impact:** Techniques are intended to scale to DOE HPC facilities, other federal labs, utilities, hyperscalers, and campus microgrids.  
+- **Primary audiences include:** DOE HPC and facility managers, grid operators and aggregators, hyperscale DC/infrastructure engineers, campus-scale energy systems and microgrid integrators.
 
 ---
 
-## Repository Layout (top-level)
+## Brief Project Description & Scope
 
-| Path / file                        | What it holds                                                                  |
-|------------------------------------|--------------------------------------------------------------------------------|
-| `data/`                            | All static datasets (job trace, simulation outputs, encrypted embeddings, …).  |
-| `scripts/`                         | Executable code (model training, semantic search, energy-aware priority, …).   |
-| `scripts/quickstart.py`            | **Quick-Start #1** – tiny CPU-only pipeline on a sampled trace of 10k jobs.    |
-| `scripts/quickstart_embedding.py`  | **Quick-Start #2** – end-to-end embedding ➜ vector DB ➜ semantic search demo.  |
-| `notebooks/`                       | Jupyter notebooks that generate all paper figures.                             |
-| `requirements.txt`                 | Python dependencies (no pinned versions—latest stable is fine).                |
+**Core innovations:**
+- **Per-Job Power Prediction:** LLM embeddings of enriched job scripts and metadata; similarity-based inference from historical job neighbors (submission-time predictions).  
+- **Digital-Twin–Based Control:** Real-time coordination of datacenter power with grid signals using validated scheduling simulations and predictive models.  
+- **Intelligent Job Scheduling & Power Capping:**  
+  - Reprioritizes jobs in SLURM using predicted power and external energy signals (SiteFactor approach—no Slurm core changes).  
+---
+
+## Findings to Date
+
+- Achieved **~17 W median per-job power-prediction error** (~5% relative) on CPU-exclusive jobs.  
+- **Validated high-fidelity scheduling simulator** on Kestrel job traces (alignment on throughput, wait-time distributions, and power over time).  
+- **Demonstrated energy-aware scheduling** that aligns workload with on-campus PV and a utility program (e.g., PG&E FlexConnect) via multi-objective optimization (power alignment and wait time).
+
+---
+
+## What This Repository Contains
+
+This repo provides the **reproducible research artifacts** for the paper and project components listed above. The **FastSim-based Slurm emulator** used in the study is currently in NREL licensing review; corresponding **inputs/outputs are provided** here to ensure end-to-end reproducibility of figures and results.
+
+| Path / file                        | Contents                                                                          |
+|------------------------------------|-----------------------------------------------------------------------------------|
+| `data/`                            | Static datasets (job traces, simulator I/O, encrypted embeddings where required). |
+| `scripts/`                         | Executables for embedding, semantic search, prediction, and energy-aware priority.|
+| `scripts/quickstart.py`            | **Quick Start #1** — sampled CPU-only pipeline on ~10k jobs.                      |
+| `scripts/quickstart_embedding.py`  | **Quick Start #2** — end-to-end embedding → vector DB → semantic retrieval demo.  |
+| `notebooks/`                       | Jupyter notebooks to regenerate paper figures.                                    |
+| `requirements.txt`                 | Python dependencies (versions pinned as needed for reproducibility).              |
+
+> **Note on privacy:** Job scripts and metadata may contain sensitive details. This repository distributes sanitized/aggregated artifacts. All LLM embeddings were computed on-premises.
 
 ---
 
 ## Environment Setup
 
-```bash
-git clone https://github.com/nrel/raddit.git
-cd raddit
+    git clone https://github.com/nrel/raddit.git
+    cd raddit
 
-# Create and activate a fresh Python ≥3.9 env
-python -m venv raddit_env
-source raddit_env/bin/activate          # Windows: raddit_env\Scripts\activate.bat
-pip install --upgrade pip
-pip install -r requirements.txt
-```
+    # Create and activate a fresh Python ≥3.9 environment
+    python -m venv raddit_env
+    source raddit_env/bin/activate        # Windows: raddit_env\Scripts\activate.bat
+    pip install --upgrade pip
+    pip install -r requirements.txt
 
-## License
+---
 
-This repository is released under the BSD 3-Clause License (see the `LICENSE` file for full text).  
-It is covered by **NREL Software Record Number SWR-23-34**.
 
+## License & Software Record
+
+Released under the **BSD 3-Clause License** (see `LICENSE`).  
+Covered by **NREL Software Record SWR-23-34**.  
 This work builds on prior related work available at [https://github.com/NREL/eagle-jobs/](https://github.com/NREL/eagle-jobs/), which is also covered under the same Software Record.
