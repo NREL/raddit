@@ -1,6 +1,10 @@
-# Resource-Aware Datacenter Digital Twin (RADDiT)  
+# Resource-Aware Data center Digital Twin (RADDiT)  
 
 RADDiT is a modular, real-time digital-twin platform designed to optimize datacenter energy use by linking job-level predictions, validated scheduling simulation, and grid-aware control.
+
+<img width="700" height="442" alt="raddit" src="https://github.com/user-attachments/assets/dcfa0564-62cb-4c1a-bb8d-d836ca1305fc" />
+
+_**RADDiT system loop.** Operational telemetry and job metadata feed a validated scheduling simulator and predictive models, while external grid/energy signals inform an optimization engine that selects control actions (e.g., scheduling priorities and power caps) applied back to the data center._
 
 ---
 
