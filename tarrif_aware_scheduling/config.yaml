@@ -1,0 +1,107 @@
+calendar:
+  start: 2025-01-01T00:00:00-07:00
+  end:   2025-06-01T00:00:00-06:00
+  timezone: America/Denver
+  holidays:
+    - 2024-10-07  # Francis Xavier Cabrini Day
+    - 2024-10-14  # Columbus Day
+    - 2024-11-11  # Veterans Day
+    - 2024-11-28  # Thanksgiving Day
+    - 2024-12-25  # Christmas Day
+    - 2025-01-01  # New Year's Day
+    - 2025-01-20  # Martin Luther King, Jr. Day
+    - 2025-02-17  # Presidents' Day
+    - 2025-05-26  # Memorial Day
+    - 2025-06-19  # Juneteenth
+    - 2025-07-04  # Independence Day
+    - 2025-09-01  # Labor Day
+
+rates:
+  effective_start_local: "2024-10-01T00:00:00-06:00"  # "Starting October 1st"
+  currency: USD
+
+  demand:
+    distribution_per_kw_month: 5.79
+    # Seasonal G&T ($/kW-month)
+    gt_per_kw_month:
+      winter: 16.25   # Oct–May
+      summer: 21.74   # Jun–Sep
+    # Windows (local time). Distribution is max ANYTIME; G&T only in weekday afternoon, non-holidays.
+    windows:
+      distribution:
+        days: "all"
+        start_local: "00:00"
+        end_local:   "24:00"
+      gt:
+        days: "mon-fri_non_holiday"
+        start_local: "15:00" # Example start
+        end_local:   "17:00" # Example end
+    seasons:
+      winter_months: [10, 11, 12, 1, 2, 3, 4, 5]
+      summer_months: [6, 7, 8, 9]
+
+  tou_energy:
+    onpeak_weekday_day:
+      price_per_kwh: 0.05 # Example price
+      days: "mon-fri_non_holiday"
+      start_local: "10:00" # Example start
+      end_local:   "20:00" # Example end
+    offpeak_other:
+      price_per_kwh: 0.04 # Example price
+      applies_to: "all_other_times"
+
+  fixed_fee_per_month: 500  # not typically allocated to submeters
+
+billing:
+  interval_minutes: 15
+  demand_measurement: "15min_average"           # utility computes 15-min average power
+  energy_from_interval_average: true            # kWh is integral of 15-min averages
+  demand_billing_rounding: "half_up_whole_kw"   # e.g., 499.5 -> 500
+  record_labeling: "trailing"                   # record at 00:15 represents prior 15 min
+  
+
+policies:
+  multi_node_same_type: true
+  allow_any_type_if_unset: true
+  forbid_start_in_gt_window_default: false
+  forbid_maintenance_overlap: true
+  background_nonnegative_clip: true
+  holidays_treated_like_weekends: true  # Holidays are treated like weekends for both G&T applicability and off-peak energy.
+
+solve:
+  # Stage A: lower-bound envelope using only CPU-exclusive job energy
+  stageA_solver: highs          # highs|gurobi
+  stageA_minutes: 5
+  envelope_max_kw: 1600
+
+  # Stage B: CP-SAT packing on exclusive CPU node counts
+  stageB_minutes_per_window: 60
+  window_weeks: 6
+  overlap_weeks: 2
+
+  half_up_epsilon_kw: 1e-6
+
+  # Envelope tracking (optional nudges)
+  envelope_weights:
+    alpha_multiplier_inside_gt: 3.0
+    beta_abs_dev: 0.0
+
+  demand_threshold_margin_kw: 10
+
+
+outputs:
+  directory: "../results/hpc_sched_results"
+  write_per_slot_timeseries: true     # timestamp, baseline_kw, background_kw, scheduled_cpu_kw, campus_net_kw
+  write_schedule: true                # job_id, start_ts, end_ts, node_type, node_count
+  write_monthly_bill: true            # raw peaks, billed kW (Dist & G&T), energy $, demand $
+  write_peak_risk_report: true        # slots within margin of next 0.5 kW step; active jobs listed
+
+
+paths:
+  maintenance_windows_csv: ../data/maintenance_windows.csv
+  meters_csv:   ../data/campus_cluster_demand.csv
+  nodes_csv:    ../data/node_inventory.csv
+  jobs_csv:     ../data/jobs.csv
+  jobs_kw_csv:  ../data/jobs_demand_kw.csv
+  merged_csv:   ../data/merged_campus_cluster_jobs.csv
+  output_dir:   ../results
